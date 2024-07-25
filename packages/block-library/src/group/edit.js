@@ -51,8 +51,7 @@ function GroupEditControls( { tagName, onSelectTagName } ) {
 	};
 	return (
 		<InspectorControls group="advanced">
-			{ /** DOUBLEEDESIGN CUSTOM: Do not show HTML element selector */ }
-			{ /*<SelectControl
+			<SelectControl
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 				label={ __( 'HTML element' ) }
@@ -68,7 +67,7 @@ function GroupEditControls( { tagName, onSelectTagName } ) {
 				value={ tagName }
 				onChange={ onSelectTagName }
 				help={ htmlElementMessages[ tagName ] }
-			/> */ }
+			/>
 		</InspectorControls>
 	);
 }

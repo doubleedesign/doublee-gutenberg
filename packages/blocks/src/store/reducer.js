@@ -66,19 +66,6 @@ function bootstrappedBlockTypes( state = {}, action ) {
 			// Don't overwrite if already set. It covers the case when metadata
 			// was initialized from the server.
 			if ( serverDefinition ) {
-				// The `selectors` prop is not yet included in the server provided
-				// definitions and needs to be polyfilled. This can be removed when the
-				// minimum supported WordPress is >= 6.3.
-				if (
-					serverDefinition.selectors === undefined &&
-					blockType.selectors
-				) {
-					newDefinition = {
-						...serverDefinition,
-						selectors: blockType.selectors,
-					};
-				}
-
 				// The `blockHooks` prop is not yet included in the server provided
 				// definitions and needs to be polyfilled. This can be removed when the
 				// minimum supported WordPress is >= 6.4.
@@ -214,13 +201,14 @@ export function blockStyles( state = {}, action ) {
 				),
 			};
 		case 'ADD_BLOCK_STYLES':
-			return {
-				...state,
-				[ action.blockName ]: getUniqueItemsByName( [
-					...( state[ action.blockName ] ?? [] ),
+			const updatedStyles = {};
+			action.blockNames.forEach( ( blockName ) => {
+				updatedStyles[ blockName ] = getUniqueItemsByName( [
+					...( state[ blockName ] ?? [] ),
 					...action.styles,
-				] ),
-			};
+				] );
+			} );
+			return { ...state, ...updatedStyles };
 		case 'REMOVE_BLOCK_STYLES':
 			return {
 				...state,
@@ -384,15 +372,41 @@ export function collections( state = {}, action ) {
 }
 
 export function blockBindingsSources( state = {}, action ) {
-	if ( action.type === 'REGISTER_BLOCK_BINDINGS_SOURCE' ) {
-		return {
-			...state,
-			[ action.sourceName ]: {
-				label: action.sourceLabel,
-				useSource: action.useSource,
-				lockAttributesEditing: action.lockAttributesEditing ?? true,
-			},
-		};
+	switch ( action.type ) {
+		case 'ADD_BLOCK_BINDINGS_SOURCE':
+			// Merge usesContext with existing values, potentially defined in the server registration.
+			let mergedUsesContext = [
+				...( state[ action.name ]?.usesContext || [] ),
+				...( action.usesContext || [] ),
+			];
+			// Remove duplicates.
+			mergedUsesContext =
+				mergedUsesContext.length > 0
+					? [ ...new Set( mergedUsesContext ) ]
+					: undefined;
+
+			return {
+				...state,
+				[ action.name ]: {
+					// Don't override the label if it's already set.
+					label: state[ action.name ]?.label || action.label,
+					usesContext: mergedUsesContext,
+					getValues: action.getValues,
+					setValues: action.setValues,
+					getPlaceholder: action.getPlaceholder,
+					canUserEditValue: action.canUserEditValue,
+				},
+			};
+		case 'ADD_BOOTSTRAPPED_BLOCK_BINDINGS_SOURCE':
+			return {
+				...state,
+				[ action.name ]: {
+					label: action.label,
+					usesContext: action.usesContext,
+				},
+			};
+		case 'REMOVE_BLOCK_BINDINGS_SOURCE':
+			return omit( state, action.name );
 	}
 	return state;
 }

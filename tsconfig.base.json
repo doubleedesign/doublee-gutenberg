@@ -5,29 +5,32 @@
 		"checkJs": true,
 		"allowSyntheticDefaultImports": true,
 		"jsx": "preserve",
-		"target": "es2020",
+		"target": "esnext",
 		"module": "esnext",
-		"lib": ["dom", "esnext", "es2020"],
+		"lib": [ "DOM", "DOM.Iterable", "ESNext" ],
 		"declaration": true,
 		"declarationMap": true,
 		"composite": true,
 		"emitDeclarationOnly": true,
 		"isolatedModules": true,
-		"skipLibCheck": true,
+
 		"skipDefaultLibCheck": true,
+
 		/* Strict Type-Checking Options */
 		"strict": true,
+
 		/* Additional Checks */
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
+
 		/* Module Resolution Options */
 		"moduleResolution": "node",
+
 		/* This needs to be false so our types are possible to consume without setting this */
 		"esModuleInterop": false,
 		"resolveJsonModule": true,
-		"typeRoots": ["./typings", "./node_modules/@types"],
+
+		"typeRoots": [ "./typings", "./node_modules/@types" ],
 		"types": []
 	},
 	"exclude": [
