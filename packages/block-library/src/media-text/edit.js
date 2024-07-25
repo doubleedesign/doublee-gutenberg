@@ -1,4 +1,9 @@
 /**
+ * DOUBLEEDESIGN CUSTOM
+ * - Removed "stacked on mobile" option because I'm handling that at the template level
+ */
+
+/**
  * External dependencies
  */
 import clsx from 'clsx';
@@ -63,9 +68,9 @@ function getImageSourceUrlBySizeSlug( image, slug ) {
 }
 
 function attributesFromMedia( {
-	attributes: { linkDestination, href },
-	setAttributes,
-} ) {
+	                              attributes: { linkDestination, href },
+	                              setAttributes,
+                              } ) {
 	return ( media ) => {
 		if ( ! media || ! media.url ) {
 			setAttributes( {
@@ -133,16 +138,15 @@ function attributesFromMedia( {
 }
 
 function MediaTextEdit( {
-	attributes,
-	isSelected,
-	setAttributes,
-	context: { postId, postType },
-} ) {
+	                        attributes,
+	                        isSelected,
+	                        setAttributes,
+	                        context: { postId, postType },
+                        } ) {
 	const {
 		focalPoint,
 		href,
 		imageFill,
-		isStackedOnMobile,
 		linkClass,
 		linkDestination,
 		linkTarget,
@@ -204,8 +208,8 @@ function MediaTextEdit( {
 				image:
 					mediaId && isSelected
 						? select( coreStore ).getMedia( mediaId, {
-								context: 'view',
-						  } )
+							context: 'view',
+						} )
 						: null,
 				imageSizes: getSettings()?.imageSizes,
 			};
@@ -241,7 +245,6 @@ function MediaTextEdit( {
 	const classNames = clsx( {
 		'has-media-on-the-right': 'right' === mediaPosition,
 		'is-selected': isSelected,
-		'is-stacked-on-mobile': isStackedOnMobile,
 		[ `is-vertically-aligned-${ verticalAlignment }` ]: verticalAlignment,
 		'is-image-fill': imageFill,
 	} );
@@ -283,7 +286,6 @@ function MediaTextEdit( {
 			label={ __( 'Settings' ) }
 			resetAll={ () => {
 				setAttributes( {
-					isStackedOnMobile: true,
 					imageFill: false,
 					mediaAlt: '',
 					focalPoint: undefined,
@@ -307,25 +309,6 @@ function MediaTextEdit( {
 					onChange={ commitWidthChange }
 					min={ WIDTH_CONSTRAINT_PERCENTAGE }
 					max={ 100 - WIDTH_CONSTRAINT_PERCENTAGE }
-				/>
-			</ToolsPanelItem>
-			<ToolsPanelItem
-				label={ __( 'Stack on mobile' ) }
-				isShownByDefault
-				hasValue={ () => ! isStackedOnMobile }
-				onDeselect={ () =>
-					setAttributes( { isStackedOnMobile: true } )
-				}
-			>
-				<ToggleControl
-					__nextHasNoMarginBottom
-					label={ __( 'Stack on mobile' ) }
-					checked={ isStackedOnMobile }
-					onChange={ () =>
-						setAttributes( {
-							isStackedOnMobile: ! isStackedOnMobile,
-						} )
-					}
 				/>
 			</ToolsPanelItem>
 			{ mediaType === 'image' && (
@@ -488,7 +471,6 @@ function MediaTextEdit( {
 						focalPoint,
 						imageFill,
 						isSelected,
-						isStackedOnMobile,
 						mediaAlt,
 						mediaId,
 						mediaPosition,

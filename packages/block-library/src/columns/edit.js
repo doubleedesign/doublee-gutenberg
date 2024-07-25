@@ -1,4 +1,8 @@
 /**
+ * DOUBLEEDESIGN CUSTOM
+ * - Removed "stacked on mobile" option because I'm handling that at the template level
+ */
+/**
  * External dependencies
  */
 import clsx from 'clsx';
@@ -47,7 +51,7 @@ const DEFAULT_BLOCK = {
 function ColumnInspectorControls( {
 	clientId,
 	setAttributes,
-	isStackedOnMobile,
+
 } ) {
 	const { count, canInsertColumnBlock, minCount } = useSelect(
 		( select ) => {
@@ -172,29 +176,18 @@ function ColumnInspectorControls( {
 					) }
 				</>
 			) }
-			<ToggleControl
-				__nextHasNoMarginBottom
-				label={ __( 'Stack on mobile' ) }
-				checked={ isStackedOnMobile }
-				onChange={ () =>
-					setAttributes( {
-						isStackedOnMobile: ! isStackedOnMobile,
-					} )
-				}
-			/>
 		</PanelBody>
 	);
 }
 
 function ColumnsEditContainer( { attributes, setAttributes, clientId } ) {
-	const { isStackedOnMobile, verticalAlignment, templateLock } = attributes;
+	const { verticalAlignment, templateLock } = attributes;
 	const registry = useRegistry();
 	const { getBlockOrder } = useSelect( blockEditorStore );
 	const { updateBlockAttributes } = useDispatch( blockEditorStore );
 
 	const classes = clsx( {
 		[ `are-vertically-aligned-${ verticalAlignment }` ]: verticalAlignment,
-		[ `is-not-stacked-on-mobile` ]: ! isStackedOnMobile,
 	} );
 
 	const blockProps = useBlockProps( {
@@ -240,7 +233,6 @@ function ColumnsEditContainer( { attributes, setAttributes, clientId } ) {
 				<ColumnInspectorControls
 					clientId={ clientId }
 					setAttributes={ setAttributes }
-					isStackedOnMobile={ isStackedOnMobile }
 				/>
 			</InspectorControls>
 			<div { ...innerBlocksProps } />

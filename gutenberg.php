@@ -1,12 +1,12 @@
 <?php
 /**
- * Plugin Name: Gutenberg
- * Plugin URI: https://github.com/WordPress/gutenberg
- * Description: Printing since 1440. This is the development plugin for the block editor, site editor, and other future WordPress core functionality.
+ * Plugin Name: Block Editor (customised)
+ * Plugin URI: https://github.com/doubleedesign/gutenberg-doublee
+ * Description: Customised version of the WordPress block editor for Double-E Design client websites.
  * Requires at least: 6.4
  * Requires PHP: 7.2
  * Version: 18.9.0-rc.1
- * Author: Gutenberg Team
+ * Author: Gutenberg Team + Leesa Ward
  * Text Domain: gutenberg
  *
  * @package gutenberg
