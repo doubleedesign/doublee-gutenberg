@@ -11,19 +11,40 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: 'release'
-      - name: Set up Git Identity
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20.10.0'
+      - name: Set up Git identity
         run: |
           git config --global user.name "Leesa Ward"
           git config --global user.email "leesa@doubleedesign.com.au"
-      - name: Merge main into release
+      - name: Delete release branch on remote if it exists
         run: |
-          git fetch origin main
-          git merge --no-commit --no-ff --allow-unrelated-histories origin/main
+          if git show-ref --quiet refs/heads/release; then
+            git push origin --delete release
+          fi
+      - name: Create empty release branch
+        run: |
+          git checkout --orphan release
+          git reset
+      - name: Build from main branch
+        run: |
+          npm install
+          npm run build
+      - name: Add required files for release
+        run: |
           git add gutenberg.php
           git add post-content.php
-          git add build
           git add lib
-          git add packages
+          git add build -f
+          git add packages/block-serialization-default-parser
+      - name: Cleanup
+        run: |
+          git clean -f -d
+      - name: Commit and push release branch
+        run: |
           git commit -m "Automated update of release branch"
-          git push origin release
+          git push origin release -f
+
